@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Barker
 ======
 
@@ -21,3 +22,9 @@ A config.json is required in order to set the database details
 }
 
 ```
+=======
+Bark
+====
+
+A WebService API for logging errors / exceptions
+>>>>>>> 2c8a3acebbd16311d81752c24e12b732434079f0
