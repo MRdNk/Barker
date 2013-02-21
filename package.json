@@ -1,0 +1,12 @@
+{
+  "name": "barker",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "3.1.0",
+    "jade": "*",
+    "request": "2.*"
+  }
+}
