@@ -3,12 +3,16 @@ var fs = require('fs');
 var pg = require('pg');
 var config = require('../config.json').db;
 
+
+
+
 function Bark (data) {
 
   var b = this.b = {};
 
   b.app = data.app || null;
   b.page = data.page || null;
+  b.filename = data.filename || null;
   b.msg = data.msg || null;
   b.stackTrace = data.stackTrace || null;
   b.userID = data.userID || null;
@@ -25,16 +29,16 @@ function Bark (data) {
 Bark.prototype.saveToDB = function () {
   var that = this;
 
-  var connString = 'tcp://' + config.user + ':' + config.password + '@' + config.host + '/' + config.database;
   var b = that.b;
-
+  var connString = 'tcp://' + config.user + ':' + config.password + '@' + config.host + '/' + config.database;
   console.log('config: ', config + '--' + connString);
 
   //database stuff
   var client = new pg.Client(connString);
+
   client.connect();
   var query = client.query('INSERT INTO "tblBarker" (app, page, msg) VALUES ($1, $2, $3)', [b.app, b.page, b.msg]);
-  console.log('INSERT INTO tblBark (app, page, msg) VALUES ($1, $2, $3)', [b.app, b.page, b.msg])
+  // console.log('INSERT INTO tblBark (app, page, msg) VALUES ($1, $2, $3)', [b.app, b.page, b.msg])
 
   query.on ('end', function () {
     console.log('end');
