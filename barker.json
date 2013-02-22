@@ -1,0 +1,11 @@
+{
+  "app": "test",
+  "page": null,
+  "msg": null,
+  "stackTrace": null,
+  "userID": null,
+  "authenticationSystem": null,
+  "environment": null,
+  "server": null,
+  "customer": null
+}
