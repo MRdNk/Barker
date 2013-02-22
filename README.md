@@ -17,6 +17,6 @@ A config.json is required in order to set the database details
     , "port": 5432
     , "user": "username"
     , "password": "password"
-    , "dbName": "barker"
+    , "database": "barker"
   }
 }

@@ -1,5 +1,7 @@
 /* barker - the API main entrance for logging */
 var fs = require('fs');
+var pg = require('pg');
+var config = require('../config.json').db;
 
 function Bark (data) {
 
@@ -23,7 +25,27 @@ function Bark (data) {
 Bark.prototype.saveToDB = function () {
   var that = this;
 
+  var connString = 'tcp://' + config.user + ':' + config.password + '@' + config.host + '/' + config.database;
+  var b = that.b;
+
+  console.log('config: ', config + '--' + connString);
+
   //database stuff
+  var client = new pg.Client(connString);
+  client.connect();
+  var query = client.query('INSERT INTO "tblBarker" (app, page, msg) VALUES ($1, $2, $3)', [b.app, b.page, b.msg]);
+  console.log('INSERT INTO tblBark (app, page, msg) VALUES ($1, $2, $3)', [b.app, b.page, b.msg])
+
+  query.on ('end', function () {
+    console.log('end');
+    client.end ();
+  })
+  
+  query.on ('error', function (err) {
+    console.error(err);
+    client.end();
+  })
+
 
 }
 
@@ -55,6 +77,7 @@ exports.index = function (req, res) {
   console.log (bark);
 
   bark.saveToFile ();
+  bark.saveToDB ();
   res.json('done')
 
 }

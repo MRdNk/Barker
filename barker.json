@@ -1,7 +1,7 @@
 {
   "app": "test",
-  "page": null,
-  "msg": null,
+  "page": "testPage",
+  "msg": "msg",
   "stackTrace": null,
   "userID": null,
   "authenticationSystem": null,
