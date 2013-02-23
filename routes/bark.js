@@ -46,10 +46,10 @@ Bark.prototype.saveToDB = function () {
   _.each(b, function (item, key) {
     queryValues.push(item);
     keys.push ( '"' + key + '"');
-    valueKeys.push ('$' + ++i)
+    valueKeys.push ('$' + ++i);
   })
 
-  console.log(keys.toString(), valueKeys.toString());
+  // console.log(keys.toString(), valueKeys.toString());
   queryString = queryString.replace('{{columns}}', keys.toString()).replace('{{valueKeys}}', valueKeys.toString());
   var query = client.query(queryString, queryValues);
   // console.log('INSERT INTO tblBark (app, page, msg) VALUES ($1, $2, $3)', [b.app, b.page, b.msg])
