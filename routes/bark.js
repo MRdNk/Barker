@@ -1,25 +1,23 @@
 /* barker - the API main entrance for logging */
 var fs = require('fs');
+var _ = require('underscore');
 var pg = require('pg');
 var config = require('../config.json').db;
-
-
-
 
 function Bark (data) {
 
   var b = this.b = {};
 
-  b.app = data.app || null;
-  b.page = data.page || null;
-  b.filename = data.filename || null;
-  b.msg = data.msg || null;
-  b.stackTrace = data.stackTrace || null;
-  b.userID = data.userID || null;
-  b.authenticationSystem = data.authenticationSystem || null;
-  b.environment = data.environment || null; // production, development, testing, staging
-  b.server = data.server || null;
-  b.customer = data.customer || null;
+  b.Application = data.app || null;
+  b.Page = data.page || null;
+  b.Filename = data.filename || null;
+  b.Message = data.msg || null;
+  b.StackTrace = data.stackTrace || null;
+  b.UserID = data.userID || null;
+  b.AuthenticationSystem = data.authenticationSystem || null;
+  b.EnvironmentID = data.environment || null; // production, development, testing, staging
+  b.Server = data.server || null;
+  b.Customer = data.customer || null;
 
   this.b = b;
 
@@ -37,7 +35,23 @@ Bark.prototype.saveToDB = function () {
   var client = new pg.Client(connString);
 
   client.connect();
-  var query = client.query('INSERT INTO "tblBarker" (app, page, msg) VALUES ($1, $2, $3)', [b.app, b.page, b.msg]);
+
+  var queryString = 'INSERT INTO "tblBarker" ({{columns}}) VALUES ({{valueKeys}})';
+
+  var keys = [];
+  var valueKeys = [];
+  var queryValues = [];
+
+  var i = 0;
+  _.each(b, function (item, key) {
+    queryValues.push(item);
+    keys.push ( '"' + key + '"');
+    valueKeys.push ('$' + ++i)
+  })
+
+  console.log(keys.toString(), valueKeys.toString());
+  queryString = queryString.replace('{{columns}}', keys.toString()).replace('{{valueKeys}}', valueKeys.toString());
+  var query = client.query(queryString, queryValues);
   // console.log('INSERT INTO tblBark (app, page, msg) VALUES ($1, $2, $3)', [b.app, b.page, b.msg])
 
   query.on ('end', function () {

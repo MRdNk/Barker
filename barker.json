@@ -1,11 +1,12 @@
 {
-  "app": "test",
-  "page": "testPage",
-  "msg": "msg",
-  "stackTrace": null,
-  "userID": null,
-  "authenticationSystem": null,
-  "environment": null,
-  "server": null,
-  "customer": null
+  "Application": "test",
+  "Page": "testPage",
+  "Filename": "testfilename",
+  "Message": "msg",
+  "StackTrace": "teststack",
+  "UserID": "4",
+  "AuthenticationSystem": "1",
+  "EnvironmentID": "1",
+  "Server": "testserver",
+  "Customer": "testcustomer"
 }
