@@ -29,9 +29,9 @@ A config.json is required in order to set the database details
 
 To Do
 -----
-- [ ] Add GitHub user authentication
-- [ ] Add GitHub raise ('post') an issue; based against an error sent to Bark
-- [ ] View all GitHub issues against a app / project
+- Add GitHub user authentication
+- Add GitHub raise ('post') an issue; based against an error sent to Bark
+- View all GitHub issues against a app / project
 
 
 License
