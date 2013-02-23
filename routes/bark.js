@@ -1,8 +1,22 @@
 /* barker - the API main entrance for logging */
 var fs = require('fs');
+
 var _ = require('underscore');
 var pg = require('pg');
-var config = require('../config.json').db;
+var winston = require('winston');
+
+var config = require('../config.json');
+var dbConfig = config.db;
+
+console.log(config.logging.filename);
+winston.add(winston.transports.File, {filename: config.logging.filename});
+
+var PostgresTransport = winston.transports.PostgresTransport = function (options) {
+  this.name = 'PostgresTransport';
+  this.level = options.level || 'info';
+
+}
+
 
 function Bark (data) {
 
@@ -12,10 +26,11 @@ function Bark (data) {
   b.Page = data.page || null;
   b.Filename = data.filename || null;
   b.Message = data.msg || null;
+  b.ErrorLevel = data.level || null;
   b.StackTrace = data.stackTrace || null;
   b.UserID = data.userID || null;
   b.AuthenticationSystem = data.authenticationSystem || null;
-  b.EnvironmentID = data.environment || null; // production, development, testing, staging
+  b.EnvironmentID = data.environment || null; // production, staging, testing, development
   b.Server = data.server || null;
   b.Customer = data.customer || null;
 
@@ -28,8 +43,8 @@ Bark.prototype.saveToDB = function () {
   var that = this;
 
   var b = that.b;
-  var connString = 'tcp://' + config.user + ':' + config.password + '@' + config.host + '/' + config.database;
-  console.log('config: ', config + '--' + connString);
+  var connString = 'tcp://' + dbConfig.user + ':' + dbConfig.password + '@' + dbConfig.host + '/' + dbConfig.database;
+  console.log('config: ', dbConfig + '--' + connString);
 
   //database stuff
   var client = new pg.Client(connString);
@@ -49,11 +64,9 @@ Bark.prototype.saveToDB = function () {
     valueKeys.push ('$' + ++i);
   })
 
-  // console.log(keys.toString(), valueKeys.toString());
   queryString = queryString.replace('{{columns}}', keys.toString()).replace('{{valueKeys}}', valueKeys.toString());
   var query = client.query(queryString, queryValues);
-  // console.log('INSERT INTO tblBark (app, page, msg) VALUES ($1, $2, $3)', [b.app, b.page, b.msg])
-
+  
   query.on ('end', function () {
     console.log('end');
     client.end ();
@@ -64,16 +77,17 @@ Bark.prototype.saveToDB = function () {
     client.end();
   })
 
-
 }
 
 Bark.prototype.saveToFile = function () {
   var that = this;
 
-  fs.writeFile('barker.json', JSON.stringify(that.b, null, 2), function (err) {
+  winston.error(that.b);
+
+  /*fs.appendFile('barker.json', JSON.stringify(that.b, null, 2), function (err) {
   if (err) throw err;
     console.log('It\'s saved!');
-  });
+  });*/
 }
 
 exports.index = function (req, res) {

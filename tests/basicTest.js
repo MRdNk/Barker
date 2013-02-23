@@ -21,12 +21,3 @@ request.post('http://localhost:3000/bark', {
     console.log(body);
   }
 });
-
-
-    
-    
-    
-    
-    
-    
-    

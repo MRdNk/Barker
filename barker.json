@@ -9,4 +9,15 @@
   "EnvironmentID": "1",
   "Server": "testserver",
   "Customer": "testcustomer"
+}{
+  "Application": "test",
+  "Page": "testPage",
+  "Filename": "testfilename",
+  "Message": "msg",
+  "StackTrace": "teststack",
+  "UserID": "4",
+  "AuthenticationSystem": "1",
+  "EnvironmentID": "1",
+  "Server": "testserver",
+  "Customer": "testcustomer"
 }
