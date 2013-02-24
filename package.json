@@ -7,6 +7,11 @@
   "dependencies": {
     "express": "3.1.0",
     "jade": "*",
-    "request": "2.*"
+    "request": "2.*",
+    "node-uuid": "1.4.*",
+    "socket.io": "0.9.*",
+    "pg": "0.12.*",
+    "winston": "0.6.*",
+    "underscore": "1.4.*"
   }
 }
