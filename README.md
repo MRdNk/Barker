@@ -22,6 +22,12 @@ A config.json is required in order to set the database details
     , "user": "username"
     , "password": "password"
     , "database": "barker"
+  },
+  "logging": {
+      "filename": "./logs/barker.json"
+  },
+  "cookie": {
+      "secret": "your secret here"
   }
 }
 

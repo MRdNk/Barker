@@ -8,9 +8,13 @@ var express = require('express')
   , user = require('./routes/user')
   , bark = require('./routes/bark')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , config = require('./config.json')
+  , app = express()
+  , server = http.createServer(app)
+  , io = require('socket.io').listen(server);
 
-var app = express();
+// var app = express();
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -20,7 +24,7 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.cookieParser('your secret here'));
+  app.use(express.cookieParser(config.cookie.secret));
   app.use(express.session());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
@@ -34,6 +38,23 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 app.post('/bark', bark.index);
 
-http.createServer(app).listen(app.get('port'), function(){
+/*http.createServer(app).listen(app.get('port'), function(){
+  console.log("Express server listening on port " + app.get('port'));
+});*/
+
+server.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
+/* socket.io */
+
+io.set('log level', 1);
+io.sockets.on('connection', connection);
+bark.addSocket(io);
+
+function connection (socket) {
+  socket.emit('bark', {message: 'hello'});
+  socket.on('response', function (data) {
+    console.log('data');
+  })
+}

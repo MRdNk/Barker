@@ -1,5 +1,6 @@
 /* barker - the API main entrance for logging */
 var fs = require('fs');
+var uuid = require('node-uuid');
 
 var _ = require('underscore');
 var pg = require('pg');
@@ -7,6 +8,8 @@ var winston = require('winston');
 
 var config = require('../config.json');
 var dbConfig = config.db;
+
+var io;
 
 console.log(config.logging.filename);
 winston.add(winston.transports.File, {filename: config.logging.filename});
@@ -26,13 +29,14 @@ function Bark (data) {
   b.Page = data.page || null;
   b.Filename = data.filename || null;
   b.Message = data.msg || null;
-  b.ErrorLevel = data.level || null;
+  b.ErrorLevel = data.level || null; //
   b.StackTrace = data.stackTrace || null;
   b.UserID = data.userID || null;
-  b.AuthenticationSystem = data.authenticationSystem || null;
+  b.AuthenticationSystem = data.authenticationSystem || null; //ClinicalPortal, WebID
   b.EnvironmentID = data.environment || null; // production, staging, testing, development
   b.Server = data.server || null;
   b.Customer = data.customer || null;
+  b.uid = uuid.v1();
 
   this.b = b;
 
@@ -90,6 +94,11 @@ Bark.prototype.saveToFile = function () {
   });*/
 }
 
+Bark.prototype.sendToWebSocket = function () {
+  var that = this;
+  io.sockets.emit('bark', {message: that.b})
+}
+
 exports.index = function (req, res) {
   
   var params = req.body;
@@ -110,6 +119,15 @@ exports.index = function (req, res) {
 
   bark.saveToFile ();
   bark.saveToDB ();
+  bark.sendToWebSocket ();
   res.json('done')
 
+  // console.log('app: ', process);
+
 }
+
+function addSocket (socketio) {
+  io = socketio;
+}
+
+exports.addSocket = addSocket;
