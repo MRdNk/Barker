@@ -6,7 +6,10 @@ A very simple logging Web Service API: for logging errors / exceptions
 Status
 ------
 
-In Development - early stages, just lets you log basic information to a Postgres database.
+In Development - early stages.
+- Lets you log basic information to a Postgres database.
+- Sends via Socket.io to main page (console.log only atm).
+- Creates a UUID for each 'bark', so that both the browser and database have a unique reference.
 
 Config.json
 -----------
