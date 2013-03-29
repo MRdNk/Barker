@@ -35,6 +35,7 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
+app.post('/select', bark.select)
 app.get('/users', user.list);
 app.post('/bark', bark.index);
 
@@ -57,4 +58,5 @@ function connection (socket) {
   socket.on('response', function (data) {
     console.log('data');
   })
+
 }

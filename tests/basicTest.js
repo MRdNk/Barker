@@ -2,16 +2,17 @@ var request = require('request');
 
 request.post('http://localhost:3000/bark', {
   form: {
-      app: 'test'
+      app: 'A new App'
     , page: 'testPage'
     , msg: 'msg'
-    , filename: 'testfilename'
-    , stackTrace: 'teststack'
+    , filename: 'users.aspx'
+    , stackTrace: 'cheesus!'
     , userID: 4
     , authenticationSystem: 1
     , environment: 1
     , server: 'testserver'
     , customer: 'testcustomer'
+    , type: 'error'
   }
 }, function (err, req, body) {
   if (err) {
