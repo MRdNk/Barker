@@ -19,9 +19,9 @@ exports.index = function (req, res) {
   bark.server       = params.server || null;
   bark.customer     = params.customer || null;*/
 
-  bark.saveToFile ();
+  // bark.saveToFile ();
   // bark.saveToDB ();
-  bark.sendToWebSocket ();
+  // bark.sendToWebSocket ();
   res.json('done')
 
   // console.log('app: ', process);
